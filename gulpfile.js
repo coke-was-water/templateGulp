@@ -2,20 +2,13 @@
 var gulp = require('gulp');
 var sass = require("gulp-sass");  //sassコンパイル
 var autoprefixer = require("gulp-autoprefixer");  //ベンダープレフィックス
-var uglify = require("gulp-uglify");  //jsコンパイル
 var browser = require("browser-sync");  //ブラウザリロード
 var plumber = require("gulp-plumber");  //エラーハンドリング
-
-gulp.task('babel', function () {
-  return gulp.src('tmp/js/**/*.js')
-    .pipe(plumber())
-    .pipe(gulp.dest('./dist'));
-});
 
 gulp.task("server", function() {
     browser({
         server: {
-            baseDir: "./html/"
+            baseDir: "./"
         }
     });
 });
@@ -30,10 +23,8 @@ gulp.task("sass", function() {
 });
 
 gulp.task("js", function() {
-    gulp.src(["tmp/js/**/*.js","!tmp/js/min/**/*.js"])
+    gulp.src(["tmp/js/**/*.js"])
     .pipe(plumber())
-    .pipe(uglify())
-    .pipe(gulp.dest("./tmp/js/min"))
     .pipe(browser.reload({stream:true}));
 });
 
@@ -45,14 +36,14 @@ gulp.task("html", function() {
 
 gulp.task("watch",['server'], function(){
   gulp.watch("tmp/scss/**/*.scss", ['sass']);
-  gulp.watch(["tmp/js/**/*.js","!tmp/js/min/**/*.js"],["js"]);
+  gulp.watch(["tmp/js/**/*.js"],["js"]);
   gulp.watch("tmp/html/**/*.html", ['html']);
   gulp.watch("tmp/html/*.html", ['html']);
 });
 
 gulp.task("default",['server'], function() {
     gulp.watch("tmp/scss/**/*.scss", ['sass']);
-    gulp.watch(["tmp/js/**/*.js","!tmp/js/min/**/*.js"],["js"]);
+    gulp.watch(["tmp/js/**/*.js"],["js"]);
     gulp.watch("tmp/html/**/*.html", ['html']);
     gulp.watch("tmp/html/*.html", ['html']);
 });
